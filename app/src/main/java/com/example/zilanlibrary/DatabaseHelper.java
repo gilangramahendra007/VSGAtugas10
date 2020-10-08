@@ -14,21 +14,20 @@ import android.util.Log;
 import java.io.File;
 import java.util.ArrayList;
 
-public class DatabaseHelper extends AppCompatActivity {
+public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static String DATABASE_NAME = "Tables";
+    public static String DATABASE_NAME = "student_database";
     private static final int DATABASE_VERSION = 1;
     private static final String TABLE_STUDENTS = "students";
     private static final String KEY_ID = "id";
     private static final String KEY_FIRSTNAME = "name";
 
-    private static final String CREATE_TABLE_STUDENTS = "CREATE TABLE"
-            + TABLE_STUDENTS + "(" + KEY_ID
-            + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_FIRSTNAME + "TEXT );";
+    private static final String CREATE_TABLE_STUDENTS = "CREATE TABLE "
+            + TABLE_STUDENTS + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_FIRSTNAME + " TEXT );";
 
 
     public DatabaseHelper(Context context){
-        Object factory;
+        //Object factory;
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         Object tag;
         Log.d("table", CREATE_TABLE_STUDENTS);
@@ -47,9 +46,10 @@ public class DatabaseHelper extends AppCompatActivity {
     }
 
     public long addStudentDetail(String student) {
-        SQLiteDatabase db = SQLiteOpenHelper.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_FIRSTNAME, student);
+        String nullColumnHack;
         long insert = db.insert(TABLE_STUDENTS, null, values);
         return insert;
     }
@@ -71,7 +71,5 @@ public class DatabaseHelper extends AppCompatActivity {
         return studentsArrayList;
     }
 
-    private SQLiteDatabase getReadableDatabase() {
-    }
 
 }
